@@ -17,7 +17,13 @@ export async function api(path, { method = 'GET', body } = {}) {
 
   let res;
   try {
-    res = await fetch(`/api${path}`, { method, headers, body: body ? JSON.stringify(body) : undefined });
+    const API_BASE = 'https://saath-website-rrsa.onrender.com';
+
+res = await fetch(`${API_BASE}/api${path}`, {
+  method,
+  headers,
+  body: body ? JSON.stringify(body) : undefined,
+});
   } catch {
     throw new ApiError('Cannot reach the server. Check that it is running and try again.', 0);
   }
