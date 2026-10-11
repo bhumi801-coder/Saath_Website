@@ -1,0 +1,10 @@
+node_modules
+client/dist
+server/*.db
+server/*.db-wal
+server/*.db-shm
+node_modules/
+.env
+.env.*
+!.env.example
+dist/

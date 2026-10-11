@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 800" width="1280" height="800" preserveAspectRatio="xMidYMid slice">
+<defs>
+<linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#E3F8FB"/><stop offset="1" stop-color="#A7E0EB"/></linearGradient>
+<linearGradient id="metal" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFFFFF"/><stop offset="1" stop-color="#E3EAF4"/></linearGradient>
+<linearGradient id="water" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7CC4FF"/><stop offset="1" stop-color="#1E88F5"/></linearGradient>
+
+</defs>
+<rect width="1280" height="800" fill="url(#bg)"/>
+<circle cx="1120" cy="110" r="230" fill="#fff" opacity="0.35"/><circle cx="90" cy="720" r="260" fill="#fff" opacity="0.24499999999999997"/><circle cx="640" cy="380" r="330" fill="#fff" opacity="0.175"/>
+<rect x="0" y="600" width="1280" height="200" fill="#B5E6EE"/>
+<rect x="0" y="590" width="1280" height="14" fill="#9CDCE8"/>
+<g transform="translate(430 90)">
+ <rect x="0" y="0" width="420" height="560" rx="44" fill="url(#metal)" stroke="#BFD6DC" stroke-width="5"/>
+ <rect x="40" y="40" width="340" height="170" rx="26" fill="#DCF4F8"/>
+ <path d="M70 150 C130 110 190 190 250 150 S340 120 350 140 V196 H70 Z" fill="url(#water)" opacity=".9"/>
+ <circle cx="130" cy="88" r="14" fill="#fff" opacity=".8"/><circle cx="180" cy="110" r="9" fill="#fff" opacity=".8"/>
+ <rect x="40" y="240" width="340" height="40" rx="20" fill="#E3EEF2"/>
+ <g transform="translate(82 260)"><circle r="12" fill="#22C55E"/></g><g transform="translate(122 260)"><circle r="12" fill="#1E88F5"/></g><g transform="translate(162 260)"><circle r="12" fill="#CBD5E1"/></g>
+ <text x="360" y="272" font-family="Inter,Arial,sans-serif" font-size="22" font-weight="800" fill="#0E7490" text-anchor="end">TDS 48</text>
+ <rect x="150" y="318" width="120" height="100" rx="18" fill="#C5DBE2"/>
+ <rect x="188" y="400" width="44" height="86" rx="12" fill="#94A3B8"/>
+ <path d="M210 486 q-16 24 0 44 q16-20 0-44Z" fill="url(#water)"/>
+</g>
+<g transform="translate(560 640)"><rect x="0" y="-50" width="160" height="14" rx="7" fill="#fff" opacity=".0"/>
+ <path d="M10 -70 H110 L100 40 Q60 56 20 40 Z" fill="#E6F6FF" stroke="#9FD3EA" stroke-width="5"/><path d="M16 -30 H104 L100 40 Q60 56 20 40 Z" fill="url(#water)" opacity=".92"/></g>
+<g fill="url(#water)">
+ <path transform="translate(190 250)" d="M0-60C34-18 52 8 52 32a52 52 0 0 1-104 0C-52 8-34-18 0-60Z"/>
+ <path transform="translate(1040 190) scale(.8)" d="M0-60C34-18 52 8 52 32a52 52 0 0 1-104 0C-52 8-34-18 0-60Z"/>
+ <path transform="translate(1110 470) scale(.6)" d="M0-60C34-18 52 8 52 32a52 52 0 0 1-104 0C-52 8-34-18 0-60Z"/>
+ <path transform="translate(270 500) scale(.5)" d="M0-60C34-18 52 8 52 32a52 52 0 0 1-104 0C-52 8-34-18 0-60Z"/>
+</g>
+<g transform="translate(980 560)">
+ <rect x="0" y="0" width="64" height="150" rx="14" fill="#1565F0"/><rect x="0" y="0" width="64" height="30" rx="14" fill="#0E4BBC"/>
+ <rect x="80" y="30" width="64" height="120" rx="14" fill="#22B8CF"/><rect x="80" y="30" width="64" height="28" rx="14" fill="#0E8FA6"/>
+ <path d="M14 70 H50 M14 96 H40 M94 92 H130 M94 118 H120" stroke="#fff" stroke-width="7" stroke-linecap="round" opacity=".85"/>
+</g>
+<path transform="translate(250 140) scale(1.1)" d="M0-30 C3-10 10-3 30 0 C10 3 3 10 0 30 C-3 10 -10 3 -30 0 C-10-3 -3-10 0-30Z" fill="#fff"/><path transform="translate(1000 120) scale(1.2)" d="M0-30 C3-10 10-3 30 0 C10 3 3 10 0 30 C-3 10 -10 3 -30 0 C-10-3 -3-10 0-30Z" fill="#fff"/><path transform="translate(380 620) scale(0.8)" d="M0-30 C3-10 10-3 30 0 C10 3 3 10 0 30 C-3 10 -10 3 -30 0 C-10-3 -3-10 0-30Z" fill="#fff"/>
+</svg>
