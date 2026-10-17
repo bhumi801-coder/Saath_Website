@@ -1,13 +1,16 @@
 import { Link } from 'react-router-dom';
 import { ServiceIcon } from './Icons.jsx';
+import ServiceMedia from './ServiceMedia.jsx';
 import { ArrowRightIcon } from './Icons.jsx';
 import { plural, rupees } from '../format.js';
 
 // `liveGroups` are the open groups for this service in the visitor's chosen society.
-export default function ServiceCard({ service: s, liveGroups = [] }) {
+// `decorative` marks the repeated copies used by the moving carousel: hidden from screen readers and the tab order.
+export default function ServiceCard({ service: s, liveGroups = [], decorative = false }) {
   const lowest = liveGroups.length ? Math.min(...liveGroups.map((g) => g.group_price)) : null;
   return (
-    <Link to={`/services/${s.slug}`} className="card service-card">
+    <Link to={`/services/${s.slug}`} className="card service-card" {...(decorative ? { 'aria-hidden': 'true', tabIndex: -1 } : {})}>
+      <ServiceMedia service={s} eager />
       <div className="service-body">
         <div className="svc-head">
           <span className={`svc-ic tone-${s.slug}`} aria-hidden="true"><ServiceIcon slug={s.slug} size={28} /></span>

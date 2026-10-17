@@ -13,7 +13,7 @@ export function Logo({ light = false }) {
       <svg width="34" height="34" viewBox="0 0 32 32" aria-hidden="true">
         <defs>
           <linearGradient id={gid} x1="4" y1="2" x2="28" y2="30" gradientUnits="userSpaceOnUse">
-            <stop offset="0" stopColor="#A78BFA" /><stop offset="1" stopColor="#6D28D9" />
+            <stop offset="0" stopColor="#E7C48C" /><stop offset="1" stopColor="#B07A47" />
           </linearGradient>
         </defs>
         <path d="M22.5 8.8C20.7 6.9 18.3 6 15.6 6 11.6 6 9 8 9 10.9c0 2.6 2 3.8 6.1 4.7 3.5.8 4.5 1.4 4.5 2.7 0 1.4-1.6 2.3-3.9 2.3-2 0-3.8-.7-5.3-2" fill="none" stroke={`url(#${gid})`} strokeWidth="3.4" strokeLinecap="round" />

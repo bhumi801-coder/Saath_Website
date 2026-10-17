@@ -4,8 +4,9 @@ import { useApi } from '../hooks.js';
 import { useAuth } from '../auth.jsx';
 import { useMeta } from '../meta.jsx';
 import SocietyOptions from '../components/SocietyOptions.jsx';
-import HeroRing from '../components/HeroRing.jsx';
-import ServiceCard, { ServiceCardSkeleton } from '../components/ServiceCard.jsx';
+import HeroBurst from '../components/HeroBurst.jsx';
+import { ServiceCardSkeleton } from '../components/ServiceCard.jsx';
+import CinemaScenes from '../components/CinemaScenes.jsx';
 import GroupRow, { GroupRowSkeleton } from '../components/GroupRow.jsx';
 import Progress from '../components/Progress.jsx';
 import { ErrorBox } from '../components/Common.jsx';
@@ -55,7 +56,7 @@ export default function Home() {
     <>
       <section className="hero">
         <div className="hero-bg" aria-hidden="true" />
-        <HeroRing />
+        <HeroBurst service={services[0]} />
         <div className="container hero-inner">
           <div className="hero-grid">
             <div className="hero-copy">
@@ -139,10 +140,10 @@ export default function Home() {
             <Link to="/services" className="link-cta">View all services <ArrowRightIcon size={16} /></Link>
           </div>
           <ErrorBox error={metaError} retry={reload} />
-          <div className="grid-3">
-            {!services.length && !metaError && Array.from({ length: 6 }, (_, i) => <ServiceCardSkeleton key={i} />)}
-            {services.map((s) => <ServiceCard key={s.slug} service={s} liveGroups={forService(s.slug)} />)}
-          </div>
+          {!services.length && !metaError && (
+            <div className="grid-3">{Array.from({ length: 6 }, (_, i) => <ServiceCardSkeleton key={i} />)}</div>
+          )}
+          {services.length > 0 && <CinemaScenes services={services} groupsFor={forService} />}
         </div>
       </section>
 
