@@ -155,7 +155,7 @@ export default function Layout() {
           <p>© {new Date().getFullYear()} Saath. Group home and car services for housing societies in Uttar Pradesh. <Link to="/policies">Terms, privacy and refunds</Link></p>
         </div>
       </footer>
-      <chatWidget />
+      <ChatWidget />
     </>
   );
 }
