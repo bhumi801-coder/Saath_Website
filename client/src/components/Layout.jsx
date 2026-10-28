@@ -5,6 +5,7 @@ import { useMeta } from '../meta.jsx';
 import { CloseIcon, MenuIcon, PinIcon } from './Icons.jsx';
 import SocietyOptions from './SocietyOptions.jsx';
 import PartnerAlerts from './PartnerAlerts.jsx';
+import ChatWidget from './ChatWidget.jsx';
 
 export function Logo({ light = false }) {
   const gid = useId();
@@ -154,6 +155,7 @@ export default function Layout() {
           <p>© {new Date().getFullYear()} Saath. Group home and car services for housing societies in Uttar Pradesh. <Link to="/policies">Terms, privacy and refunds</Link></p>
         </div>
       </footer>
+      <chatWidget />
     </>
   );
 }

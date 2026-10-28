@@ -16,6 +16,7 @@ import {
 import { registerProviderRoutes, publicProvider, publicAdmin } from './providers.js';
 import { registerPasswordReset } from './password-reset.js';
 import { warnIfNotConfigured } from './notify.js';
+import { registerChat } from './chat.js';
 import * as events from './events.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -533,6 +534,8 @@ app.get('/api/session', (req, res) => {
 // ---------- service partners and admins ---------------------------------------
 registerProviderRoutes(app, { auth, bad, clean, limit, signToken, slotLabel, today, flags: partnerFlags });
 registerPasswordReset(app, { bad, clean, limit, secret: JWT_SECRET });
+
+registerChat(app, { db });
 
 app.get('/api/health', (_req, res) => res.json({ ok: true, payments: payMode }));
 

@@ -16,11 +16,12 @@ const TW_SID = env.TWILIO_ACCOUNT_SID || '';
 const TW_TOKEN = env.TWILIO_AUTH_TOKEN || '';
 const TW_SMS_FROM = env.TWILIO_SMS_FROM || '';          // e.g. +1415XXXXXXX or a Twilio Messaging Service SID (MG...)
 const TW_WA_FROM = env.TWILIO_WHATSAPP_FROM || '';      // e.g. +14155238886 (sandbox) or your approved WhatsApp sender
+const F2S_KEY = env.FAST2SMS_API_KEY || '';             // India SMS for reset codes (fast2sms.com, OTP route)
 const RESEND_KEY = env.RESEND_API_KEY || '';
 const MAIL_FROM = env.MAIL_FROM || '';                  // e.g. "Saath <no-reply@yourdomain.in>"
 
 export const live = {
-  sms: Boolean(TW_SID && TW_TOKEN && TW_SMS_FROM),
+  sms: Boolean((TW_SID && TW_TOKEN && TW_SMS_FROM) || F2S_KEY),
   whatsapp: Boolean(TW_SID && TW_TOKEN && TW_WA_FROM),
   email: Boolean(RESEND_KEY && MAIL_FROM),
 };
@@ -65,8 +66,26 @@ async function twilio(to, from, body) {
   }
 }
 
+// Fast2SMS OTP route: sends the standard text "Your OTP: <code>" to a 10-digit Indian mobile number.
+async function fast2sms(to, code) {
+  const res = await fetch('https://www.fast2sms.com/dev/bulkV2', {
+    method: 'POST',
+    headers: { authorization: F2S_KEY, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ route: 'otp', variables_values: String(code), numbers: String(to).replace(/^\+91/, '') }),
+    signal: AbortSignal.timeout(FETCH_TIMEOUT),
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok || data.return !== true) throw new Error(`Fast2SMS ${res.status}: ${[].concat(data.message || 'request failed').join(' ')}`);
+}
+
+const TWILIO_SMS_ON = Boolean(TW_SID && TW_TOKEN && TW_SMS_FROM);
+
 const senders = {
-  sms: (to, { text }) => twilio(to, TW_SMS_FROM, text),
+  sms: (to, { text, otp }) => {
+    if (F2S_KEY && otp) return fast2sms(to, otp);                 // reset codes go through Fast2SMS
+    if (TWILIO_SMS_ON) return twilio(to, TW_SMS_FROM, text);       // other texts need Twilio (or a DLT template)
+    return Promise.reject(new Error('Fast2SMS sends only OTP codes. Add Twilio (or a DLT template) for other SMS.'));
+  },
   whatsapp: (to, { text }) => twilio(`whatsapp:${to}`, TW_WA_FROM.startsWith('whatsapp:') ? TW_WA_FROM : `whatsapp:${TW_WA_FROM}`, text),
   email: async (to, { subject, text }) => {
     const res = await fetch('https://api.resend.com/emails', {
@@ -90,7 +109,7 @@ const logRow = (kind, channel, to, status, error, body) => {
 };
 
 // One channel, one recipient. Returns 'sent' | 'console' | 'failed' | 'skipped'.
-async function deliver(channel, to, { kind, subject, text, sensitive }) {
+async function deliver(channel, to, { kind, subject, text, sensitive, otp }) {
   const stored = sensitive ? '(hidden: contains a secret code)' : text;
   if (!live[channel]) {
     if (!PROD) {
@@ -103,7 +122,7 @@ async function deliver(channel, to, { kind, subject, text, sensitive }) {
     return 'skipped';
   }
   try {
-    await senders[channel](to, { subject, text });
+    await senders[channel](to, { subject, text, otp });
     logRow(kind, channel, to, 'sent', '', stored);
     return 'sent';
   } catch (e) {
@@ -117,19 +136,22 @@ async function deliver(channel, to, { kind, subject, text, sensitive }) {
 //   channels: any of 'whatsapp' | 'sms' | 'email'.
 //   mode 'all'   (default): try every channel listed.
 //   mode 'first'          : try them in order and stop at the first that works (WhatsApp, then SMS as backup).
-export async function send({ kind, to = {}, channels, mode = 'all', subject = '', text, sensitive = false }) {
+export async function send({ kind, to = {}, channels, mode = 'all', subject = '', text, sensitive = false, otp = '' }) {
   const results = {};
   try {
     const phone = e164(to.phone);
     const addr = { sms: phone, whatsapp: phone, email: to.email || null };
     const list = channels.filter((c) => addr[c]);
     if (mode === 'first') {
-      for (const c of list) {
-        results[c] = await deliver(c, addr[c], { kind, subject, text, sensitive });
+      for (let i = 0; i < list.length; i++) {
+        const c = list[i];
+        // If this channel is not set up but a later one is (WhatsApp off, SMS on), go straight to the later one.
+        if (!live[c] && list.slice(i + 1).some((x) => live[x])) continue;
+        results[c] = await deliver(c, addr[c], { kind, subject, text, sensitive, otp });
         if (results[c] === 'sent' || results[c] === 'console') break;
       }
     } else {
-      await Promise.all(list.map(async (c) => { results[c] = await deliver(c, addr[c], { kind, subject, text, sensitive }); }));
+      await Promise.all(list.map(async (c) => { results[c] = await deliver(c, addr[c], { kind, subject, text, sensitive, otp }); }));
     }
   } catch (e) { console.error('[notify] unexpected error', e); }
   return results;

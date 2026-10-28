@@ -55,7 +55,7 @@ export function registerPasswordReset(app, { bad, clean, limit, secret }) {
       const first = acct.name.split(' ')[0];
       const text = `${code} is your Saath password reset code. It works for ${CODE_MINUTES} minutes. Do not share it with anyone.`;
       later(() => Promise.all([
-        send({ kind: 'password_reset', to: { phone: acct.phone }, channels: ['whatsapp', 'sms'], mode: 'first', text, sensitive: true }),
+        send({ kind: 'password_reset', to: { phone: acct.phone }, channels: ['whatsapp', 'sms'], mode: 'first', text, sensitive: true, otp: code }),
         send({
           kind: 'password_reset', to: { email: acct.email }, channels: ['email'], sensitive: true,
           subject: 'Your Saath password reset code',
